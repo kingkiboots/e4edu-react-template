@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>기본혜택 관리</title>
+    <meta name="description" content="Chart.js" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui" />
+    <!-- Call App Mode on ios devices -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+    <!-- base css -->
+    <link rel="stylesheet" media="screen, print" href="css/vendors.bundle.css" />
+    <link rel="stylesheet" media="screen, print" href="css/app.bundle.css" />
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png" />
+    <link rel="mask-icon" href="img/favicon/safari-pinned-tab.svg" color="#5bbad5" />
+    <link rel="stylesheet" media="screen, print" href="css/statistics/chartjs/chartjs.css" />
+    <link rel="stylesheet" media="screen, print" href="css/datagrid/datatables/datatables.bundle.css" />
+    <link rel="stylesheet" media="screen, print" href="css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css" />
+    <link type="text/css" rel="stylesheet" href="css/default.css" />
+
+    <link id="mytheme" rel="stylesheet" href="css/themes/cust-theme-7.css" />
+    <!-- 20200409 추가 -->
+  </head>
+  <body class="mod-bg-1">
+    <!-- DOC: script to save and load page settings -->
+    <script>
+      /**
+       *	This script should be placed right after the body tag for fast execution
+       *	Note: the script is written in pure javascript and does not depend on thirdparty library
+       **/
+      'use strict';
+
+      var classHolder = document.getElementsByTagName('BODY')[0],
+        /**
+         * Load from localstorage
+         **/
+        themeSettings = localStorage.getItem('themeSettings') ? JSON.parse(localStorage.getItem('themeSettings')) : {},
+        themeURL = themeSettings.themeURL || '',
+        themeOptions = themeSettings.themeOptions || '';
+      /**
+       * Load theme options
+       **/
+      if (themeSettings.themeOptions) {
+        classHolder.className = themeSettings.themeOptions;
+        console.log('%c✔ Theme settings loaded', 'color: #148f32');
+      } else {
+        console.log('Heads up! Theme settings is empty or does not exist, loading default settings...');
+      }
+      if (themeSettings.themeURL && !document.getElementById('mytheme')) {
+        var cssfile = document.createElement('link');
+        cssfile.id = 'mytheme';
+        cssfile.rel = 'stylesheet';
+        cssfile.href = themeURL;
+        document.getElementsByTagName('head')[0].appendChild(cssfile);
+      }
+      /**
+       * Save to localstorage
+       **/
+      var saveSettings = function () {
+        themeSettings.themeOptions = String(classHolder.className)
+          .split(/[^\w-]+/)
+          .filter(function (item) {
+            return /^(nav|header|mod|display)-/i.test(item);
+          })
+          .join(' ');
+        if (document.getElementById('mytheme')) {
+          themeSettings.themeURL = document.getElementById('mytheme').getAttribute('href');
+        }
+        localStorage.setItem('themeSettings', JSON.stringify(themeSettings));
+      };
+      /**
+       * Reset settings
+       **/
+      var resetSettings = function () {
+        localStorage.setItem('themeSettings', '');
+      };
+    </script>
+    <!-- BEGIN Page Wrapper -->
+    <div class="page-wrapper">
+      <div class="page-inner">
+        <!-- BEGIN Left Aside -->
+        <aside class="page-sidebar">
+          <div class="page-logo">
+            <a href="대시보드.html" class="page-logo-link d-flex align-items-center position-relative">
+              <img src="img/owlog_logo.png" alt="마이데이터" aria-roledescription="logo" />
+              <span class="page-logo-text mr-1 fw-500">Pay 2.0 System</span>
+            </a>
+          </div>
+          <!-- BEGIN PRIMARY NAVIGATION -->
+          <nav id="js-primary-nav" class="primary-nav" role="navigation">
+            <ul id="js-nav-menu" class="nav-menu">
+              <li>
+                <a href="#">
+                  <i class="fal fa-smile"></i>
+                  <span class="nav-link-text">해피페이머니</span>
+                </a>
+                <ul>
+                  <li>
+                    <a href="회원정보 관리.html">
+                      <span class="nav-link-text">회원정보 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="연결계좌 관리.html">
+                      <span class="nav-link-text">연결계좌 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="충전설정 관리.html">
+                      <span class="nav-link-text">충전설정 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="충전-인출내역 조회.html">
+                      <span class="nav-link-text">충전/인출내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="전환내역 조회.html">
+                      <span class="nav-link-text">전환내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="사용내역 조회.html">
+                      <span class="nav-link-text">사용내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="한도 관리.html">
+                      <span class="nav-link-text">한도 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="해피페이머니 회원 현황.html">
+                      <span class="nav-link-text">해피페이머니 회원 현황</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="충전-인출-전환-사용 현황.html">
+                      <span class="nav-link-text">충전/인출/전환/사용/적립 현황</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="챌린지참여 내역.html">
+                      <span class="nav-link-text">챌린지참여 내역</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="회원등급 조정.html">
+                      <span class="nav-link-text">회원등급 조정</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="회원등급 조정내역.html">
+                      <span class="nav-link-text">회원등급 조정내역</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="적립머니 지급-회수 관리.html">
+                      <span class="nav-link-text">적립머니 지급/회수 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="적립머니 지급 일괄처리 관리.html">
+                      <span class="nav-link-text">적립머니 지급 일괄처리 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="해피페이머니 회원 현황.html">
+                      <span class="nav-link-text">해피페이머니 회원 현황</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="충전-인출-전환-사용 현황.html">
+                      <span class="nav-link-text">충전/인출/전환/사용/적립 현황</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="active open">
+                <a href="#">
+                  <i class="fal fa-gem"></i>
+                  <span class="nav-link-text">상품/혜택</span>
+                </a>
+                <ul>
+                  <li>
+                    <a href="상품정보 관리.html">
+                      <span class="nav-link-text">상품정보 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="챌린지팝업 관리.html">
+                      <span class="nav-link-text">챌린지팝업 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="챌린지 관리.html">
+                      <span class="nav-link-text">챌린지 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="챌린지 미참여 회원 조회.html">
+                      <span class="nav-link-text">챌린지 미참여 회원 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="챌린지 현황.html">
+                      <span class="nav-link-text">챌린지 현황</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="챌린지 통합 지표.html">
+                      <span class="nav-link-text">챌린지 통합 지표</span>
+                    </a>
+                  </li>
+                  <li class="active">
+                    <a href="기본혜택 관리.html">
+                      <span class="nav-link-text">기본혜택 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="기본혜택 리워드 내역.html">
+                      <span class="nav-link-text">기본혜택 리워드 내역</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="회원 등급기준 관리.html">
+                      <span class="nav-link-text">회원 등급기준 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="브랜드 상세정보 관리.html">
+                      <span class="nav-link-text">브랜드 상세정보 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="등급별 결제 혜택 관리.html">
+                      <span class="nav-link-text">등급별 결제 혜택 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="등급별 결제 혜택 리워드 내역.html">
+                      <span class="nav-link-text">등급별 결제 혜택 리워드 내역</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="브랜드별 리워드 통계.html">
+                      <span class="nav-link-text">브랜드별 리워드 통계</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="등급별 리워드 통계.html">
+                      <span class="nav-link-text">등급별 리워드 통계</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fal fa-warehouse-alt"></i>
+                  <span class="nav-link-text">가맹점</span>
+                </a>
+                <ul>
+                  <li>
+                    <a href="가맹점정보 조회.html">
+                      <span class="nav-link-text">가맹점정보 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="그룹가맹점정보 관리.html">
+                      <span class="nav-link-text">그룹가맹점정보 관리</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fal fa-credit-card"></i>
+                  <span class="nav-link-text">카드</span>
+                </a>
+                <ul>
+                  <li>
+                    <a href="카드발급 신청.html">
+                      <span class="nav-link-text">카드발급 신청</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="발급집계내역 조회.html">
+                      <span class="nav-link-text">발급집계내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="카드 비밀번호 변경.html">
+                      <span class="nav-link-text">카드 비밀번호 변경</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="제신고이력 조회.html">
+                      <span class="nav-link-text">제신고이력 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="카드 발급-배송 조회.html">
+                      <span class="nav-link-text">카드 발급/배송 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="반송카드 관리.html">
+                      <span class="nav-link-text">반송카드 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="신분증 진위여부 내역조회.html">
+                      <span class="nav-link-text">신분증 진위여부 내역조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="1차카드발급 신청.html">
+                      <span class="nav-link-text">1차카드발급 신청</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="영업점관리.html">
+                      <span class="nav-link-text">영업점관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="DIPS이용대금 청구내역 조회.html">
+                      <span class="nav-link-text">DIPS이용대금 청구내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="DIPS소득공제내역 조회.html">
+                      <span class="nav-link-text">DIPS소득공제내역 조회</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fal fa-clipboard-check"></i>
+                  <span class="nav-link-text">승인/사고</span>
+                </a>
+                <ul>
+                  <li>
+                    <a href="카드사고 관리.html">
+                      <span class="nav-link-text">카드사고 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="카드사고 매트릭스 관리.html">
+                      <span class="nav-link-text">카드사고 매트릭스 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="승인내역 조회.html">
+                      <span class="nav-link-text">승인내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="승인집계내역 조회.html">
+                      <span class="nav-link-text">승인집계내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="승인대사내역 조회.html">
+                      <span class="nav-link-text">승인대사내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="BC승인대사로그집계내역 조회.html">
+                      <span class="nav-link-text">BC승인대사로그집계내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="DIPS승인내역 조회.html">
+                      <span class="nav-link-text">DIPS승인내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="DIPS사고내역 조회.html">
+                      <span class="nav-link-text">DIPS사고내역 조회</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fal fa-scanner-keyboard"></i>
+                  <span class="nav-link-text">매입/정산</span>
+                </a>
+                <ul>
+                  <li>
+                    <a href="매입내역 조회.html">
+                      <span class="nav-link-text">매입내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="매입집계내역 조회.html">
+                      <span class="nav-link-text">매입집계내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="EDI취소선지급내역 조회.html">
+                      <span class="nav-link-text">EDI취소선지급내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="온라인PG사업자 재정산내역 조회.html">
+                      <span class="nav-link-text">온라인PG사업자재정산내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="미입출금내역 조회 및 관리.html">
+                      <span class="nav-link-text">미입출금내역 조회 및 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="가맹점 정산내역 조회.html">
+                      <span class="nav-link-text">가맹점 정산내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="매출항목별 가맹점 정산집계내역 조회.html">
+                      <span class="nav-link-text">매출항목별 가맹점 정산집계내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="BC대행수수료 정산내역 조회.html">
+                      <span class="nav-link-text">BC대행수수료 정산내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="대행수수료코드 관리.html">
+                      <span class="nav-link-text">대행수수료코드 관리</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fal fa-calculator"></i>
+                  <span class="nav-link-text">회계</span>
+                </a>
+                <ul>
+                  <li>
+                    <a href="계정처리내역 조회.html">
+                      <span class="nav-link-text">계정처리내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="계정처리집계내역 조회.html">
+                      <span class="nav-link-text">계정처리집계내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="회계 계정코드 관리.html">
+                      <span class="nav-link-text">회계 계정코드 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="세금계산서 발행내역 조회.html">
+                      <span class="nav-link-text">세금계산서 발행내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="해피머니 잔액대사 조회.html">
+                      <span class="nav-link-text">해피머니 잔액대사 조회</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fal fa-university"></i>
+                  <span class="nav-link-text">오픈뱅킹</span>
+                </a>
+                <ul>
+                  <li>
+                    <a href="참가기관 상태 조회.html">
+                      <span class="nav-link-text">참가기관 상태 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="오픈뱅킹 수수료 조회.html">
+                      <span class="nav-link-text">오픈뱅킹 수수료 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="API 사용 집계 조회.html">
+                      <span class="nav-link-text">API 사용 집계 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="출금이체 한도 조회.html">
+                      <span class="nav-link-text">출금이체 한도 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="이상거래탐지내역 조회.html">
+                      <span class="nav-link-text">이상거래탐지내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="API 관리.html">
+                      <span class="nav-link-text">API 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="API 사용시스템 관리.html">
+                      <span class="nav-link-text">API 사용시스템 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="이용기관정보.html">
+                      <span class="nav-link-text">이용기관정보</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="이용기관 등록계좌 관리.html">
+                      <span class="nav-link-text">이용기관 등록계좌 관리</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fal fa-money-bill-alt"></i>
+                  <span class="nav-link-text">선불정보</span>
+                </a>
+                <ul>
+                  <li>
+                    <a href="정보제공거래내역 조회.html">
+                      <span class="nav-link-text">정보제공거래내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="정보제공정상처리내역 조회.html">
+                      <span class="nav-link-text">정보제공정상처리내역 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="정보제공처리대행비용 조회.html">
+                      <span class="nav-link-text">정보제공처리대행비용 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="정보제공수취수수료 조회.html">
+                      <span class="nav-link-text">정보제공수취수수료 조회</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a href="정보제공 회원정보 관리.html">
+                      <span class="nav-link-text">정보제공 회원정보 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="선불이용기관 정보 조회.html">
+                      <span class="nav-link-text">선불이용기관 정보 조회</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fal fa-hand-receiving"></i>
+                  <span class="nav-link-text">공통정보</span>
+                </a>
+                <ul>
+                  <li>
+                    <a href="공통그룹코드 관리.html">
+                      <span class="nav-link-text">공통그룹코드 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="공통코드 관리.html">
+                      <span class="nav-link-text">공통코드 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="영업일 관리.html">
+                      <span class="nav-link-text">영업일 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="약관 관리.html">
+                      <span class="nav-link-text">약관 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="BIN번호별 채번정보 관리.html">
+                      <span class="nav-link-text">BIN번호별 채번정보 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="금융기관 관리.html">
+                      <span class="nav-link-text">금융기관 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="공지사항 관리.html">
+                      <span class="nav-link-text">공지사항 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="배너관리.html">
+                      <span class="nav-link-text">배너관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="이용안내 관리.html">
+                      <span class="nav-link-text">이용안내 관리</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fal fa-cog"></i>
+                  <span class="nav-link-text">시스템</span>
+                </a>
+                <ul>
+                  <li>
+                    <a href="영업일정보 관리.html">
+                      <span class="nav-link-text">메뉴 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="약관 관리.html">
+                      <span class="nav-link-text">메뉴 권한그룹 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="BIN번호별 채번정보 관리.html">
+                      <span class="nav-link-text">사용자 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="금융기관 관리.html">
+                      <span class="nav-link-text">Admin 사용자 이력 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="Admin 사용자 관리.html">
+                      <span class="nav-link-text">대외 송수신로그 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="오픈뱅킹 로그 조회.html">
+                      <span class="nav-link-text">오픈뱅킹 로그 조회</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="배치 관리.html">
+                      <span class="nav-link-text">배치 관리</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="기간별 현황 조회.html">
+                      <span class="nav-link-text">기간별 현황 조회</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+          <!-- END PRIMARY NAVIGATION -->
+        </aside>
+        <!-- END Left Aside -->
+        <div class="page-content-wrapper">
+          <!-- BEGIN Page Header -->
+          <header class="page-header" role="banner">
+            <!-- DOC: nav menu layout change shortcut -->
+            <div class="hidden-md-down dropdown-icon-menu position-relative">
+              <a href="#" class="header-btn btn js-waves-off" data-action="toggle" data-class="nav-function-hidden" title="Hide Navigation">
+                <i class="ni ni-menu"></i>
+              </a>
+              <ul>
+                <li>
+                  <a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-minify" title="Minify Navigation">
+                    <i class="ni ni-minify-nav"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-fixed" title="Lock Navigation">
+                    <i class="ni ni-lock-nav"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- DOC: mobile button appears during mobile width -->
+            <div class="hidden-lg-up">
+              <a href="#" class="header-btn btn press-scale-down" data-action="toggle" data-class="mobile-nav-on">
+                <i class="ni ni-menu"></i>
+              </a>
+            </div>
+            <div class="ml-auto d-flex">
+              <!-- app user menu -->
+              <div>
+                <a href="#" data-toggle="dropdown" title="회원정보" class="header-icon d-flex align-items-center justify-content-center ml-2">
+                  <img src="img/demo/avatars/avatar-m.png" class="profile-image rounded-circle" alt="Admin" /><span class="userinfo mgl10">admin님 환영합니다.</span>
+                </a>
+              </div>
+              <div>
+                <a href="#" data-toggle="dropdown" title="회원정보변경" class="header-icon d-flex align-items-center justify-content-center ml-2">
+                  <i class="fal fa-ellipsis-v"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-animated dropdown">
+                  <a href="#" class="dropdown-item m-0 pt-3 pb-3" data-toggle="modal" data-target="#password-change-modal">
+                    <span>비밀번호변경</span>
+                    <i class="fal fa-lock-alt float-right"></i>
+                  </a>
+                  <div class="dropdown-divider m-0"></div>
+                  <a href="login.html" class="dropdown-item fw-500 pt-3 pb-3">
+                    <span>Logout</span>
+                    <i class="fal fa-sign-out-alt float-right"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </header>
+          <!-- END Page Header -->
+          <!-- BEGIN Page Content -->
+          <!-- the #js-page-content id is needed for some plugins to initialize -->
+          <main id="js-page-content" role="main" class="page-content">
+            <ol class="breadcrumb bg-transparent breadcrumb-sm pl-0 pr-0">
+              <li class="breadcrumb-item">
+                <a href="#"> <i class="fal fa-home mr-1"></i> Home </a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="#"> 상품/혜택 </a>
+              </li>
+              <li class="breadcrumb-item active">기본혜택 관리</li>
+            </ol>
+
+            <!-- 검색조건//-->
+            <div class="search-content">
+              <table class="w100p">
+                <tbody>
+                  <tr>
+                    <td class="w90p">
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right">혜택구분</label>
+                            <div class="col-12 col-lg-8">
+                              <select class="form-control form-control-sm" id="">
+                                <option>전체</option>
+                                <option>최초가입</option>
+                                <option>최초결제</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-3">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right">혜택명</label>
+                            <div class="col-12 col-lg-8">
+                              <input type="text" class="form-control form-control-sm" placeholder="" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-3 form-label text-lg-right">검색기간</label>
+                            <div class="col-12 col-lg-4 p-0">
+                              <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="시작일자" id="datepicker-4-3" data-date-format="yyyy-mm-dd" />
+                                <div class="input-group-append">
+                                  <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-check"></i>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-lg-1 text-center pdt5">~</div>
+                            <div class="col-12 col-lg-4 p-0">
+                              <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="종료일자" id="datepicker-4-4" data-date-format="yyyy-mm-dd" />
+                                <div class="input-group-append">
+                                  <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-check"></i>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="w10p text-right">
+                      <div class="btn-group">
+                        <button class="btn btn-sm btn-info" type="button"><i class="fal fa-search"></i>&nbsp;&nbsp;조회</button>
+                        <button class="btn btn-sm btn-dark" type="button"><i class="fal fa-times" title="초기화"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!--// 검색조건 -->
+
+            <!-- 기본혜택 관리 목록 -->
+            <div class="row">
+              <div class="col-xl-12">
+                <div id="panel-4" class="panel">
+                  <div class="panel-hdr">
+                    <h2>
+                      기본혜택 목록
+                      <small class="mgl20"
+                        ><i>총 <strong class="color-danger-900">6건</strong>이 검색되었습니다.</i></small
+                      >
+                    </h2>
+                    <div class="panel-toolbar">
+                      <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="창 최소"></button>
+                      <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="창 최대"></button>
+                      <!--<button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>-->
+                    </div>
+                  </div>
+                  <div class="panel-container show">
+                    <div class="panel-content">
+                      <div class="row">
+                        <div class="col-xl-12 overflow-x-auto">
+                          <!-- datatable start -->
+                          <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100 nav-row">
+                            <thead>
+                              <tr>
+                                <th>No.</th>
+                                <th>혜택구분</th>
+                                <th>혜택명</th>
+                                <th>지급기준금액</th>
+                                <th>지급률</th>
+                                <th>최대지급금액</th>
+                                <th>시작일자</th>
+                                <th>종료일자</th>
+                                <th>사용여부</th>
+                                <th>등록일시</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr onclick="select('join')">
+                                <td class="text-center">1</td>
+                                <td class="text-center">최초가입</td>
+                                <td>4월 첫 회원가입 1,000원 캐시백</td>
+                                <td class="text-right"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center">1,000원</td>
+                                <td class="text-center">2023-04-01</td>
+                                <td class="text-center">2023-04-30</td>
+                                <td class="text-center">Y</td>
+                                <td class="text-center">2023-03-27 15:42:11</td>
+                              </tr>
+                              <tr onclick="select('paym')">
+                                <td class="text-center">2</td>
+                                <td class="text-center">최초결제</td>
+                                <td>4월 첫 결제 1,000원 캐시백</td>
+                                <td class="text-right">10,000원</td>
+                                <td class="text-center">10%</td>
+                                <td class="text-center">3,000원</td>
+                                <td class="text-center">2023-04-01</td>
+                                <td class="text-center">2023-04-30</td>
+                                <td class="text-center">Y</td>
+                                <td class="text-center">2023-03-27 15:38:54</td>
+                              </tr>
+                              <tr>
+                                <td class="text-center">3</td>
+                                <td class="text-center">최초가입</td>
+                                <td>3월 첫 회원가입 1,000원 캐시백</td>
+                                <td class="text-right"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center">1,000원</td>
+                                <td class="text-center">2023-03-01</td>
+                                <td class="text-center">2023-03-31</td>
+                                <td class="text-center">Y</td>
+                                <td class="text-center">2023-02-14 11:08:32</td>
+                              </tr>
+                              <tr>
+                                <td class="text-center">4</td>
+                                <td class="text-center">최초결제</td>
+                                <td>3월 첫 결제 1,000원 캐시백</td>
+                                <td class="text-right">10,000원</td>
+                                <td class="text-center">15%</td>
+                                <td class="text-center">3,000원</td>
+                                <td class="text-center">2023-03-01</td>
+                                <td class="text-center">2023-03-31</td>
+                                <td class="text-center">Y</td>
+                                <td class="text-center">2023-02-14 11:06:09</td>
+                              </tr>
+                              <tr>
+                                <td class="text-center">5</td>
+                                <td class="text-center">최초가입</td>
+                                <td>2월 첫 회원가입 2,000원 캐시백</td>
+                                <td class="text-right"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center">2,000원</td>
+                                <td class="text-center">2023-02-01</td>
+                                <td class="text-center">2023-02-28</td>
+                                <td class="text-center">Y</td>
+                                <td class="text-center">2023-01-20 16:45:53</td>
+                              </tr>
+                              <tr>
+                                <td class="text-center">6</td>
+                                <td class="text-center">최초결제</td>
+                                <td>2월 첫 결제 2,000원 캐시백</td>
+                                <td class="text-right">10,000원</td>
+                                <td class="text-center">20%</td>
+                                <td class="text-center">3,000원</td>
+                                <td class="text-center">2023-02-01</td>
+                                <td class="text-center">2023-02-28</td>
+                                <td class="text-center">Y</td>
+                                <td class="text-center">2023-01-20 16:41:27</td>
+                              </tr>
+                            </tbody>
+                            <!--<tfoot>
+                                                            <tr>
+                                                                <td class="text-center" colspan="10">검색 데이터가 없습니다.</td>
+                                                            </tr>
+                                                        </tfoot>-->
+                          </table>
+                          <!-- datatable end -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--// 기본혜택 관리 목록-->
+
+            <!-- 기본혜택 정보-->
+            <div class="row mgb5">
+              <div class="col-xl-12 text-right">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-primary waves-effect waves-themed"><i class="fal fa-plus mr-1"></i> 등록</button>
+                  <button type="button" class="btn btn-sm btn-dark waves-effect waves-themed"><i class="fal fa-eraser mr-1"></i> 수정</button>
+                  <!--<button type="button" class="btn btn-sm btn-dark waves-effect waves-themed" data-toggle="modal" data-target=".example-modal-centered-transparent"><i class="fal fa-trash mr-1"></i> 삭제</button>
+                                    <button type="button" class="btn btn-sm btn-dark waves-effect waves-themed"><i class="fal fa-redo mr-1"></i> 복구</button>-->
+                  <button type="button" class="btn btn-sm btn-dark waves-effect waves-themed"><i class="fal fa-times mr-1"></i> 초기화</button>
+                </div>
+              </div>
+            </div>
+            <!-- 기본혜택 정보 -->
+            <div class="row" id="base_first" style="display: block">
+              <div class="col-xl-12">
+                <div id="panel-5" class="panel">
+                  <div class="panel-hdr">
+                    <h2>기본혜택 정보<!-- <small class="mgl20"><i>총 <strong class="color-danger-900">0건</strong>이 검색되었습니다.</i></small>--></h2>
+                    <div class="panel-toolbar">
+                      <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="창 최소"></button>
+                      <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="창 최대"></button>
+                      <!--<button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>-->
+                    </div>
+                  </div>
+                  <div class="panel-container show">
+                    <div class="panel-content">
+                      <div class="row">
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>혜택구분</label>
+                            <div class="col-12 col-lg-8">
+                              <select class="form-control form-control-sm" id="">
+                                <option>선택</option>
+                                <option>최초가입</option>
+                                <option>최초결제</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-8">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-2 form-label text-lg-right"><span class="req">*</span>혜택명</label>
+                            <div class="col-12 col-lg-10">
+                              <input type="text" id="simpleinput1" class="form-control form-control-sm" value="" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 hr-line"></div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right">지급기준금액</label>
+                            <div class="col-12 col-lg-8">
+                              <input type="text" id="simpleinput2" class="form-control form-control-sm text-right" value="" disabled />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right">지급률</label>
+                            <div class="col-12 col-lg-8">
+                              <input type="text" id="simpleinput3" class="form-control form-control-sm text-right" value="" disabled />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>최대지급금액</label>
+                            <div class="col-12 col-lg-8">
+                              <input type="text" id="simpleinput4" class="form-control form-control-sm text-right" value="" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 hr-line"></div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>시작일자</label>
+                            <div class="col-12 col-lg-8">
+                              <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="서비스시작일" id="datepicker-4-1" data-date-format="yyyy-mm-dd" value="" />
+                                <div class="input-group-append">
+                                  <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-check"></i>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>종료일자</label>
+                            <div class="col-12 col-lg-8">
+                              <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="서비스종료일" id="datepicker-4-2" data-date-format="yyyy-mm-dd" value="" />
+                                <div class="input-group-append">
+                                  <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-check"></i>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>사용여부</label>
+                            <div class="col-12 col-lg-8">
+                              <select class="form-control form-control-sm" id="">
+                                <option>선택</option>
+                                <option>Y</option>
+                                <option>N</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--// 기본혜택 정보 -->
+            <!-- 기본혜택 정보 최초가입 -->
+            <div class="row" id="base_join" style="display: none">
+              <div class="col-xl-12">
+                <div id="panel-5" class="panel">
+                  <div class="panel-hdr">
+                    <h2>기본혜택 정보<!-- <small class="mgl20"><i>총 <strong class="color-danger-900">0건</strong>이 검색되었습니다.</i></small>--></h2>
+                    <div class="panel-toolbar">
+                      <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="창 최소"></button>
+                      <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="창 최대"></button>
+                      <!--<button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>-->
+                    </div>
+                  </div>
+                  <div class="panel-container show">
+                    <div class="panel-content">
+                      <div class="row">
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>혜택구분</label>
+                            <div class="col-12 col-lg-8">
+                              <select class="form-control form-control-sm" id="">
+                                <option>선택</option>
+                                <option selected>최초가입</option>
+                                <option>최초결제</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-8">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-2 form-label text-lg-right"><span class="req">*</span>혜택명</label>
+                            <div class="col-12 col-lg-10">
+                              <input type="text" id="simpleinput1" class="form-control form-control-sm" value="4월 첫 회원가입 1,000원 캐시백" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 hr-line"></div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right">지급기준금액</label>
+                            <div class="col-12 col-lg-8">
+                              <input type="text" id="simpleinput2" class="form-control form-control-sm text-right" value="" disabled />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right">지급률</label>
+                            <div class="col-12 col-lg-8">
+                              <input type="text" id="simpleinput3" class="form-control form-control-sm text-right" value="" disabled />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>최대지급금액</label>
+                            <div class="col-12 col-lg-8">
+                              <input type="text" id="simpleinput4" class="form-control form-control-sm text-right" value="1,000" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 hr-line"></div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>시작일자</label>
+                            <div class="col-12 col-lg-8">
+                              <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="서비스시작일" id="datepicker-4-1" data-date-format="yyyy-mm-dd" value="2023-04-01" />
+                                <div class="input-group-append">
+                                  <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-check"></i>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>종료일자</label>
+                            <div class="col-12 col-lg-8">
+                              <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="서비스종료일" id="datepicker-4-2" data-date-format="yyyy-mm-dd" value="2023-04-30" />
+                                <div class="input-group-append">
+                                  <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-check"></i>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>사용여부</label>
+                            <div class="col-12 col-lg-8">
+                              <select class="form-control form-control-sm" id="">
+                                <option>선택</option>
+                                <option selected>Y</option>
+                                <option>N</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--// 기본혜택 정보 최초가입 -->
+            <!-- 기본혜택 정보 최초결제 -->
+            <div class="row" id="base_paym" style="display: none">
+              <div class="col-xl-12">
+                <div id="panel-5" class="panel">
+                  <div class="panel-hdr">
+                    <h2>기본혜택 정보<!-- <small class="mgl20"><i>총 <strong class="color-danger-900">0건</strong>이 검색되었습니다.</i></small>--></h2>
+                    <div class="panel-toolbar">
+                      <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="창 최소"></button>
+                      <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="창 최대"></button>
+                      <!--<button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>-->
+                    </div>
+                  </div>
+                  <div class="panel-container show">
+                    <div class="panel-content">
+                      <div class="row">
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>혜택구분</label>
+                            <div class="col-12 col-lg-8">
+                              <select class="form-control form-control-sm" id="">
+                                <option>선택</option>
+                                <option>최초가입</option>
+                                <option selected>최초결제</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-8">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-2 form-label text-lg-right"><span class="req">*</span>혜택명</label>
+                            <div class="col-12 col-lg-10">
+                              <input type="text" id="simpleinput1" class="form-control form-control-sm" value="4월 첫 결제 캐시백" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 hr-line"></div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right">지급기준금액</label>
+                            <div class="col-12 col-lg-8">
+                              <input type="text" id="simpleinput2" class="form-control form-control-sm text-right" value="10,000" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right">지급률</label>
+                            <div class="col-12 col-lg-8">
+                              <input type="text" id="simpleinput3" class="form-control form-control-sm text-right" value="10" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>최대지급금액</label>
+                            <div class="col-12 col-lg-8">
+                              <input type="text" id="simpleinput4" class="form-control form-control-sm text-right" value="3,000" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 hr-line"></div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>시작일자</label>
+                            <div class="col-12 col-lg-8">
+                              <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="서비스시작일" id="datepicker-4-1" data-date-format="yyyy-mm-dd" value="2023-04-01" />
+                                <div class="input-group-append">
+                                  <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-check"></i>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>종료일자</label>
+                            <div class="col-12 col-lg-8">
+                              <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="서비스종료일" id="datepicker-4-2" data-date-format="yyyy-mm-dd" value="2023-04-30" />
+                                <div class="input-group-append">
+                                  <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-check"></i>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group row">
+                            <label class="col-form-label col-12 col-lg-4 form-label text-lg-right"><span class="req">*</span>사용여부</label>
+                            <div class="col-12 col-lg-8">
+                              <select class="form-control form-control-sm" id="">
+                                <option>선택</option>
+                                <option selected>Y</option>
+                                <option>N</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--// 기본혜택 정보 최초결제 -->
+          </main>
+          <!-- this overlay is activated only when mobile menu is triggered -->
+          <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
+          <!-- END Page Content -->
+        </div>
+      </div>
+    </div>
+    <!-- END Page Wrapper -->
+    <!-- 비밀번호 변경 -->
+    <div class="modal fade" id="password-change-modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">비밀번호 변경</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true"><i class="fal fa-times"></i></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="panel-content">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group row">
+                    <label class="col-form-label col-12 col-lg-6 form-label text-lg-right"><span class="req">*</span>현재비밀번호</label>
+                    <div class="col-12 col-lg-6">
+                      <input type="password" id="password" class="form-control form-control-sm" value="" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12 hr-line"></div>
+                <div class="col-sm-12">
+                  <div class="form-group row">
+                    <label class="col-form-label col-12 col-lg-6 form-label text-lg-right"><span class="req">*</span>변경 비밀번호</label>
+                    <div class="col-12 col-lg-6">
+                      <input type="password" id="newpassword" class="form-control form-control-sm" value="" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12 hr-line"></div>
+                <div class="col-sm-12">
+                  <div class="form-group row">
+                    <label class="col-form-label col-12 col-lg-6 form-label text-lg-right"><span class="req">*</span>변경 비밀번호 확인</label>
+                    <div class="col-12 col-lg-6">
+                      <input type="password" id="newpassword2" class="form-control form-control-sm" value="" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="alert alert-warning alert-dismissible fade show mgt30 mgb0 pdr0" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true"><i class="fal fa-times-circle"></i></span>
+              </button>
+              <ul class="list-unstyled">
+                <li class="mgb10"><i class="fal fa-info-circle"></i><strong> 비밀번호 규칙</strong></li>
+                <li>1. 1개 이상의 특수문자</li>
+                <li class="pdl15 fc06">- 사용가능 특수문자 : '!,@,#,$,%,^,&,*,(,)'</li>
+                <li>2. 1개 이상의 대문자</li>
+                <li>3. 1개 이상의 숫자</li>
+                <li>4. 최소 8자리 이상 최대 16자리 이하</li>
+                <li>5. 최근 3회 비밀번호 사용금지</li>
+              </ul>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">변경</button>
+            <button type="button" class="btn btn-sm btn-primary">닫기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--// 비밀번호 변경-->
+
+    <script src="js/vendors.bundle.js"></script>
+    <script src="js/app.bundle.js"></script>
+
+    <script type="text/javascript">
+      $('#defaultIndeterminate').prop('indeterminate', true);
+
+      var toggleCheckbox = function () {
+        $('#js-checkbox-toggle').toggleText('Change to CIRCLE', 'Change back to default');
+        $('.frame-wrap .custom-checkbox').toggleClass('custom-checkbox-circle');
+      };
+
+      var toggleRadio = function () {
+        $('#js-radio-toggle').toggleText('Change to ROUNDED', 'Change back to default');
+        $('.frame-wrap .custom-radio').toggleClass('custom-radio-rounded');
+      };
+    </script>
+
+    <!-- Data table-->
+    <script src="js/datagrid/datatables/datatables.bundle.js"></script>
+    <script>
+      /* demo scripts for change table color */
+      /* change background */
+
+      $(document).ready(function () {
+        $('#dt-basic-example').dataTable({
+          responsive: false,
+          select: true
+        });
+        $('#dt-basic-example2').dataTable({
+          responsive: false,
+          select: true
+        });
+
+        $('.js-thead-colors a').on('click', function () {
+          var theadColor = $(this).attr('data-bg');
+          console.log(theadColor);
+          $('#dt-basic-example thead').removeClassPrefix('bg-').addClass(theadColor);
+        });
+
+        $('.js-tbody-colors a').on('click', function () {
+          var theadColor = $(this).attr('data-bg');
+          console.log(theadColor);
+          $('#dt-basic-example').removeClassPrefix('bg-').addClass(theadColor);
+        });
+      });
+    </script>
+    <script src="js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script>
+      // Class definition
+
+      var controls = {
+        leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+        rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+      };
+
+      var runDatePicker = function () {
+        // minimum setup
+        $('#datepicker-1').datepicker({
+          todayHighlight: true,
+          orientation: 'bottom left',
+          templates: controls
+        });
+
+        // input group layout
+        $('#datepicker-2').datepicker({
+          todayHighlight: true,
+          orientation: 'bottom left',
+          templates: controls
+        });
+
+        // input group layout for modal demo
+        $('#datepicker-modal-2').datepicker({
+          todayHighlight: true,
+          orientation: 'bottom left',
+          templates: controls
+        });
+
+        // enable clear button
+        $('#datepicker-3').datepicker({
+          todayBtn: 'linked',
+          clearBtn: true,
+          todayHighlight: true,
+          templates: controls
+        });
+
+        // enable clear button for modal demo
+        $('#datepicker-modal-3').datepicker({
+          todayBtn: 'linked',
+          clearBtn: true,
+          todayHighlight: true,
+          templates: controls
+        });
+
+        // orientation
+        $('#datepicker-4-1').datepicker({
+          orientation: 'top left',
+          todayHighlight: true,
+          templates: controls
+        });
+
+        $('#datepicker-4-2').datepicker({
+          orientation: 'top right',
+          todayHighlight: true,
+          templates: controls
+        });
+
+        $('#datepicker-4-3').datepicker({
+          orientation: 'bottom left',
+          todayHighlight: true,
+          templates: controls
+        });
+
+        $('#datepicker-4-4').datepicker({
+          orientation: 'bottom right',
+          todayHighlight: true,
+          templates: controls
+        });
+
+        // range picker
+        $('#datepicker-5').datepicker({
+          todayHighlight: true,
+          templates: controls
+        });
+
+        // inline picker
+        $('#datepicker-6').datepicker({
+          todayHighlight: true,
+          templates: controls
+        });
+
+        $('#datepicker-7-1').datepicker({
+          orientation: 'bottom left',
+          todayHighlight: true,
+          templates: controls
+        });
+
+        $('#datepicker-7-2').datepicker({
+          orientation: 'bottom left',
+          todayHighlight: true,
+          templates: controls
+        });
+
+        $('#datepicker-7-3').datepicker({
+          orientation: 'bottom left',
+          todayHighlight: true,
+          templates: controls
+        });
+      };
+
+      $(document).ready(function () {
+        runDatePicker();
+      });
+
+      function select(id) {
+        $('div[id^="base_"]').hide();
+        $('#base_' + id).show();
+      }
+    </script>
+  </body>
+</html>
