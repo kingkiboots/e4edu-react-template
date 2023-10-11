@@ -32,7 +32,7 @@ const SampleListLayout = ({ searchInfo }) => {
               그룹가맹점 목록{' '}
               <small className="mgl20">
                 <i>
-                  총 <strong className="color-danger-900">0건</strong>이 검색되었습니다.
+                  총 <strong className="color-danger-900">{itemList.length ?? 0}건</strong>이 검색되었습니다.
                 </i>
               </small>
             </h2>

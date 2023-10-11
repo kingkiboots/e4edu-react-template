@@ -9,6 +9,7 @@ const SampleLayout = () => {
     isFetch: false,
     isClear: false
   });
+
   return (
     <Layout>
       <SampleSearchbarLayout setSearchInfo={setSearchInfo} />
